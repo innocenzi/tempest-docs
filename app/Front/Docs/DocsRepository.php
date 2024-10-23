@@ -21,7 +21,7 @@ readonly class DocsRepository
     ) {
     }
 
-    public function find(string $category, string $slug): ?DocsChapter
+    public function find(string $category, string $slug, array $data = []): ?DocsChapter
     {
         $path = glob(__DIR__ . "/Content/{$category}/*{$slug}*.md")[0] ?? null;
 
@@ -30,6 +30,12 @@ readonly class DocsRepository
         }
 
         $content = file_get_contents($path);
+
+        // TODO: this is not ideal at all, but I'm not sure where to hook
+        // into the contents before it being rendered as markdown.
+        foreach ($data as $key => $value) {
+            $content = str_replace("%{$key}%", $value, $content);
+        }
 
         $markdown = $this->markdown->convert($content);
 
@@ -68,9 +74,5 @@ readonly class DocsRepository
                 ];
             })
             ->mapTo(DocsChapter::class);
-    }
-
-    private function getContent(string $category, string $slug): ?string
-    {
     }
 }
