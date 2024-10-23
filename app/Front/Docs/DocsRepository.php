@@ -7,15 +7,19 @@ namespace App\Front\Docs;
 use League\CommonMark\Extension\FrontMatter\Output\RenderedContentWithFrontMatter;
 use League\CommonMark\MarkdownConverter;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
-use Tempest\Support\ArrayHelper;
+
 use function Tempest\Support\arr;
+
+use Tempest\Support\ArrayHelper;
+
 use function Tempest\Support\str;
 
 readonly class DocsRepository
 {
     public function __construct(
         private MarkdownConverter $markdown,
-    ) {}
+    ) {
+    }
 
     public function find(string $category, string $slug): ?DocsChapter
     {
@@ -44,7 +48,7 @@ readonly class DocsRepository
     }
 
     /**
-     * @return \App\Front\Docs\DocsChapter[]
+     * @return ArrayHelper<\App\Front\Docs\DocsChapter>
      */
     public function all(string $category = '*'): ArrayHelper
     {
